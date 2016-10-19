@@ -69,3 +69,8 @@ jaryFromJValue _ = Left "Not a JSON Array"
 instance (JSON a) => JSON (JAry a) where
   toJValue = JArray . JAry . map toJValue . fromJAry
   fromJValue = jaryFromJValue
+
+getres :: JValue -> [Bool]
+getres v = case fromJValue v of 
+ Right (JAry a) -> a
+ Left _ -> []
