@@ -70,6 +70,19 @@ instance (JSON a) => JSON (JAry a) where
   toJValue = JArray . JAry . map toJValue . fromJAry
   fromJValue = jaryFromJValue
 
+instance (JSON a) => JSON (JObj a) where
+  toJValue = JObject . JObj . map (\(f, s) -> (f, toJValue s)) . fromJObj
+  fromJValue (JObject (JObj o)) = whenRight JObj (mapEithers unwrap o)  where
+    -- my variant was:
+    --unwrap (f, s) = 
+    --  case fromJValue s of
+    --    Left err -> Left err
+    --    Right v -> Right (f, v)
+    
+    -- but original is much better.
+    -- here we have a good example of using (,) function - as a result less code and no need to pattern match
+    unwrap (f, s) = whenRight ((,) f) (fromJValue s) 
+    
 getres :: JValue -> [Bool]
 getres v = case fromJValue v of 
  Right (JAry a) -> a
