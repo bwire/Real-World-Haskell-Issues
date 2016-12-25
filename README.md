@@ -1,2 +1,2 @@
-# Real-World-Haskell-Issues
+# Real-World-Haskell walkthrough
 Different topcis from http://book.realworldhaskell.org/
